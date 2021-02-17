@@ -9,7 +9,7 @@ public class Lesson1 {
     public static void main(String[] args) {
         System.out.println(functionCalculator(1.1f, 2.2f, 3.3f, 4.4f));
         System.out.println(sumRangeCheck(100, 50));
-        System.out.println(sumRangeCheck(5, 10));
+        System.out.println(sumRangeCheck(10, 10));
         isNumberPositive(0);
         isNumberPositive(-1);
         System.out.println(isNumberPositiveBoolean(-1));
@@ -46,7 +46,7 @@ public class Lesson1 {
     }
 
     public static boolean sumRangeCheck(int a, int b) {
-        return a + b > 10 && a + b < 20;
+        return (a + b >= 10) && (a + b <=20);
     }
 
     public static void isNumberPositive(int a) {
