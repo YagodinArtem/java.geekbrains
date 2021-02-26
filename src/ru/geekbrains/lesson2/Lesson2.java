@@ -8,12 +8,14 @@ import java.util.Map;
 public class Lesson2 {
 
     public static void main(String[] args) {
-        oneToZeroConvert();
-        arrayInitializer();
-        lessSixMultiply();
-        diagonalElementsToZero();
-        minMaxFinder();
-        minMaxFinder2();
+        oneToZeroConvert(new int[]{1, 1, 0, 0, 1, 0, 1, 1, 0, 0});
+        arrayInitializer(8);
+        lessSixMultiply(new int[]{1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1});
+        diagonalElementsToOne(10);
+        minMaxFinder(new int[]{15, 2, 1598, 4, 68, 6, 1597, 189, 9, -69});
+        minMaxFinder(new int[0]);
+        minMaxFinder2(new int[]{15, 2, 1598, 4, 68, 6, 1597, 189, 9, -69});
+        minMaxFinder2(new int[0]);
         System.out.println("\n" + checkBalance(new int[]{2, 2, 2, 1, 2, 2, 10, 1}));
         System.out.println("\n" + checkBalance(new int[]{1, 1, 1, 2, 1}));
         System.out.println("\n" + checkBalance(new int[]{3, 3, 0, 3, 3}));
@@ -24,33 +26,31 @@ public class Lesson2 {
         elementPositionMover2(new int[]{1, 2, 3, 4, 5, 6}, 15);
     }
 
-    private static void oneToZeroConvert() {
-        int[] oneAndZeroes = {1, 1, 0, 0, 1, 0, 1, 1, 0, 0};
-        System.out.println(Arrays.toString(oneAndZeroes) + " - start version");
-        for (int i = 0; i < oneAndZeroes.length; i++) {
-            if (oneAndZeroes[i] > 0) oneAndZeroes[i] = 0;
-            else oneAndZeroes[i] = 1;
+    private static void oneToZeroConvert(int[] arrayOfInts) {
+        System.out.println(Arrays.toString(arrayOfInts) + " - start version");
+        for (int i = 0; i < arrayOfInts.length; i++) {
+            if (arrayOfInts[i] > 0) arrayOfInts[i] = 0;
+            else arrayOfInts[i] = 1;
         }
-        System.out.println(Arrays.toString(oneAndZeroes) + " - after method works\n");
+        System.out.println(Arrays.toString(arrayOfInts) + " - after method works\n");
     }
 
-    private static void arrayInitializer() {
-        int[] arrayOfInts = new int[8];
+    private static void arrayInitializer(int arrayLength) {
+        int[] arrayOfInts = new int[arrayLength];
         for (int i = 0; i < arrayOfInts.length; i++)
             arrayOfInts[i] = i * 3;
         System.out.println(Arrays.toString(arrayOfInts) + "\n");
     }
 
-    private static void lessSixMultiply() {
-        int[] arrayOfInts = {1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1};
+    private static void lessSixMultiply(int[] arrayOfInts) {
         System.out.println(Arrays.toString(arrayOfInts) + " - start version");
         for (int i = 0; i < arrayOfInts.length; i++)
             if (arrayOfInts[i] < 6) arrayOfInts[i] *= 2;
         System.out.println(Arrays.toString(arrayOfInts) + " - after method works\n");
     }
 
-    private static void diagonalElementsToZero() {
-        int[][] matrix = new int[10][10];
+    private static void diagonalElementsToOne(int matrixSize) {
+        int[][] matrix = new int[matrixSize][matrixSize];
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
                 if (i == j || i + j == matrix.length - 1) matrix[i][j] = 1;
@@ -60,23 +60,26 @@ public class Lesson2 {
         }
     }
 
-    private static void minMaxFinder() {
-        int[] arrayOfInts = {15, 2, 1598, 4, 68, 6, 1597, 189, 9, -69};
-        int min = arrayOfInts[0];
-        int max = arrayOfInts[0];
+    private static void minMaxFinder(int[] arrayOfInts) {
+        int min, max;
+        if (arrayOfInts != null && arrayOfInts.length > 0) {
+            min = arrayOfInts[0];
+            max = arrayOfInts[0];
+            for (int i : arrayOfInts) {
+                if (i < min) min = i;
+                else if (i > max) max = i;
+            }
+            System.out.println("\nРешение первым способом:\nМинимальное значение: " + min + " Максимальное значение: " + max);
+        } else System.out.println("\nМассив пуст!");
 
-        for (int i : arrayOfInts) {
-            if (i < min) min = i;
-            else if (i > max) max = i;
-        }
-        System.out.println("\nРешение первым способом:\nМинимальное значение: " + min + " Максимальное значение: " + max);
     }
 
-    private static void minMaxFinder2() {
-        int[] arrayOfInts = {15, 2, 1598, 4, 68, 6, 1597, 189, 9, -69};
-        Arrays.sort(arrayOfInts);
-        System.out.println("\nРешение вторым способом:\nМинимальное значение: " + arrayOfInts[0]
-                + " Максимальное значение: " + arrayOfInts[arrayOfInts.length - 1]);
+    private static void minMaxFinder2(int[] arrayOfInts) {
+        if (arrayOfInts != null && arrayOfInts.length > 0) {
+            Arrays.sort(arrayOfInts);
+            System.out.println("\nРешение вторым способом:\nМинимальное значение: " + arrayOfInts[0]
+                    + " Максимальное значение: " + arrayOfInts[arrayOfInts.length - 1]);
+        } else System.out.println("\nМассив пуст!");
     }
 
     private static boolean checkBalance(int[] array) {
@@ -113,7 +116,7 @@ public class Lesson2 {
             }
         }
         else System.out.println("N равно нулю");
-        System.out.println("\n First position mover method " + Arrays.toString(array));
+        System.out.println("\nFirst position mover method " + Arrays.toString(array));
     }
 
     private static void elementPositionMover2(int[] array, int n) {
@@ -136,6 +139,6 @@ public class Lesson2 {
             for (Map.Entry<Integer, Integer> mapEntrySet : valuesAndNewPositions.entrySet())
                 array[mapEntrySet.getKey()] = mapEntrySet.getValue();
         }
-        System.out.println("\n Second position mover method " + Arrays.toString(array));
+        System.out.println("\nSecond position mover method " + Arrays.toString(array));
     }
 }
