@@ -11,28 +11,38 @@ public class GuessTheWord {
             "cherry", "garlic", "grape", "melon", "leak", "kiwi", "mango", "mushroom", "nut", "olive", "pea",
             "peanut", "pear", "pepper", "pineapple", "pumpkin", "potato"};
 
+    private static final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private static boolean nextGame;
+
     public static void main(String[] args) throws IOException {
         newGame();
+        reader.close();
     }
 
     private static void newGame() throws IOException {
         System.out.println("Игра началась! Компьютер загадал слово, ваша задача его отгадать.");
-        boolean gamerChance = false;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String randomWord = words[getRandomNumber()];
         String gamerTry;
-        while (!gamerChance) {
+        while (true) {
             gamerTry = reader.readLine();
             if (gamerTry.equals(randomWord)) {
-                System.out.println("Вы угадали слово! Желаете сыграть еще раз? Введите yes или no");
-                gamerChance = true;
-                String nextGame = reader.readLine();
-                if (nextGame.equals("yes")) newGame();
-                else if ((nextGame.equals("no"))) System.exit(0);
+                isUserContinue();
+                if (nextGame) newGame();
+                else System.exit(0);
             } else {
                 showMatches(randomWord, gamerTry);
             }
         }
+    }
+
+    private static void isUserContinue() throws IOException {
+        System.out.println("Вы угадали слово! Желаете сыграть еще раз? Введите yes или no");
+        String choice = reader.readLine();
+        if (choice.equals("yes")) {
+            nextGame = true;
+        } else if (choice.equals("no")) {
+            nextGame = false;
+        } else isUserContinue();
     }
 
     private static void showMatches(String randomWord, String gamerTry) {
@@ -48,7 +58,7 @@ public class GuessTheWord {
     }
 
     private static int getRandomNumber() {
-        return (int) (Math.random() * 26);
+        return (int) (Math.random() * words.length-1);
     }
 
 }
