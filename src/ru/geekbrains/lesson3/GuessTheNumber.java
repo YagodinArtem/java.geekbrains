@@ -11,11 +11,12 @@ public class GuessTheNumber {
     static int gameRangeStartPoint = 0;
     static int nextGame = 1;
     static boolean isUserWin = false;
-    static int gamerTry = 3;
+    static int gamerTry;
 
     public static void main(String[] args) throws IOException {
         while (nextGame == 1) {
             try {
+                gamerTry = 3;
                 game();
                 isUserContinue(isUserWin);
             } catch (IOException e) {
@@ -28,7 +29,6 @@ public class GuessTheNumber {
     private static void game() throws IOException {
         System.out.println("\nНовая игра! Вам необходимо угадать число, которое загадал компьютер от "
                 + gameRangeStartPoint + " до " + (gameRangeEndPoint-1) + " c " + gamerTry + " попыток");
-        gamerTry = 3;
         int randomNumber = getRandomNumber();
         int gamerChance;
         while (gamerTry > 0) {
@@ -47,7 +47,7 @@ public class GuessTheNumber {
     private static int getInputNumber() throws IOException {
         String input = reader.readLine();
         if (isNumeric(input) &&
-                Integer.parseInt(input) > gameRangeStartPoint &&
+                Integer.parseInt(input) >= gameRangeStartPoint &&
                 Integer.parseInt(input) < gameRangeEndPoint) return Integer.parseInt(input);
         else {
             System.out.println("Введите число! В диапазоне от 0 до " + (gameRangeEndPoint-1));
