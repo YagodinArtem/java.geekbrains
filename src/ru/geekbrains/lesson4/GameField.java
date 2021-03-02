@@ -32,6 +32,10 @@ public class GameField {
         }
     }
 
+    public int getCellsToWin() {
+        return cellsToWin;
+    }
+
     boolean setCellsToWin(int cellsToWin) {
         if (cellsToWin >= 3 && cellsToWin <= gameFieldSize) {
             this.cellsToWin = cellsToWin;
@@ -69,15 +73,17 @@ public class GameField {
     }
 
     void clear() {
-        try {
-            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+//        } catch (IOException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        This method only works in commandline in windows
     }
 
     void print() {
         clear();
+        System.out.println();
         for (int i = 0; i <= gameFieldSize; i++) {
             System.out.print(i + " ");
         }
