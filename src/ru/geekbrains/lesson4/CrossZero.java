@@ -199,8 +199,8 @@ public class CrossZero {
             return true;
         result = true;
         for (int i = 1; i < field.getCellsToWin() && result; i++)
-            result = field.getGameField()[field.getGameFieldSize() - i - 1][i] == playerCell
-                    && field.getGameField()[field.getGameFieldSize() - i - 1][i] == field.getGameField()[field.getGameFieldSize() - 1][0];
+            result = field.getGameField()[field.getCellsToWin() - i - 1][i] == playerCell
+                    && field.getGameField()[field.getCellsToWin() - i - 1][i] == field.getGameField()[field.getCellsToWin() - 1][0];
         return result;
     }
 
