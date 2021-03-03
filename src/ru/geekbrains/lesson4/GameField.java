@@ -22,7 +22,7 @@ public class GameField {
     }
 
     boolean setGameFieldSize(int gameFieldSize) {
-        if (gameFieldSize >= MIN_GAME_FIELD_SIZE && gameFieldSize <= MAX_GAME_FIELD_SIZE) {
+        if (gameFieldSize <= MAX_GAME_FIELD_SIZE) {
             this.gameFieldSize = gameFieldSize;
             return true;
         } else {
@@ -37,12 +37,12 @@ public class GameField {
     }
 
     boolean setCellsToWin(int cellsToWin) {
-        if (cellsToWin >= 3 && cellsToWin <= gameFieldSize) {
+        if (cellsToWin == gameFieldSize || cellsToWin == gameFieldSize-1 & cellsToWin >= 3) {
             this.cellsToWin = cellsToWin;
             return true;
         } else {
-            System.out.print("Количество ячеек для победы не может быть меньше "
-                    + MIN_GAME_FIELD_SIZE + " и быть больше размера игрового поля. Ввод:");
+            System.out.print("Количество ячеек для победы не может быть меньше размера игрового поля -1," +
+                    "(для поля размером 3 минимум 3) и быть больше размера игрового поля. Ввод:");
             return false;
         }
     }
@@ -103,8 +103,8 @@ public class GameField {
                 + MIN_GAME_FIELD_SIZE + ", " + MID_GAME_FIELD_SIZE + ", " + MAX_GAME_FIELD_SIZE + ", Ввод: ");
         while (!setGameFieldSize(getInputNumber())) {
         }
-        System.out.print("Инициализация игрового поля. Введите количество ячеек для победы, минимум - "
-                + MIN_GAME_FIELD_SIZE + " максимум - " + getGameFieldSize() + ", Ввод: ");
+        System.out.print("Инициализация игрового поля. Введите количество ячеек для победы, минимум: размер поля -1," +
+                "максимум - " + getGameFieldSize() + ", Ввод: ");
         while (!setCellsToWin(getInputNumber())) {
         }
         fillFieldWithEmpty();

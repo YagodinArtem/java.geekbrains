@@ -36,26 +36,26 @@ public class CrossZero {
         fieldInitialize();
         gamersInitialize();
 
-        while (!isWinnerFind) {
+        while (!isWinnerFind && isFieldHasEmpty()) {
             if (gamer.turn) {
                 gamerMove();
-                if (findWinner(gamer.playerCell)) {
+                if (findWinnerAllDim(gamer.playerCell)) {
                     gamer.setWin(true);
                     break;
                 }
             } else {
                 computerMove();
-                if (findWinner(computer.playerCell)) {
+                if (findWinnerAllDim(computer.playerCell)) {
                     computer.setWin(true);
                     break;
                 }
             }
             field.print();
         }
-
-        if (gamer.isWin) System.out.print("Вы победили! Желаете продолжить? Введите yes || no Ввод: \n");
-        if (computer.isWin) System.out.print("Компьютер одержал победу! Желаете продолжить? Введите yes || no Ввод: \n");
         field.print();
+        if (gamer.isWin) System.out.print("Вы победили! Желаете продолжить? Введите yes || no Ввод: ");
+        if (computer.isWin) System.out.print("Компьютер одержал победу! Желаете продолжить? Введите yes || no Ввод: ");
+        if (!isFieldHasEmpty()) System.out.println("Не осталось свободных клеток! Желаете продолжить? Введите yes || no Ввод: ");
     }
 
     private static void isUserContinue() throws IOException {
@@ -165,47 +165,70 @@ public class CrossZero {
         }
     }
 
-    private static boolean findWinner(char playerCell) {
-        return findWinnerHorizontal(playerCell) || findWinnerVertical(playerCell) || findWinnerDiagonale(playerCell);
-
-    }
-
-    private static boolean findWinnerHorizontal(char playerCell) {
+    private static boolean findWinnerAllDim(char playerCell) {
         for (int i = 0; i < field.getGameFieldSize(); i++) {
             int cellsQuantityInRow = 1;
+            int cellsQuantityInColumn = 1;
             for (int j = 0; j < field.getGameFieldSize() - 1; j++) {
                 if (field.getGameField()[i][j] == playerCell
                         && field.getGameField()[i][j] == field.getGameField()[i][j + 1]) {
                     cellsQuantityInRow++;
                 }
-            }
-            if (cellsQuantityInRow >= field.getCellsToWin()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean findWinnerVertical(char playerCell) {
-        for (int i = 0; i < field.getGameFieldSize(); i++) {
-            int cellsQuantityInRow = 1;
-            for (int j = 0; j < field.getGameFieldSize() - 1; j++)
                 if (field.getGameField()[j][i] == playerCell
                         && field.getGameField()[j][i] == field.getGameField()[j + 1][i]) {
-                    cellsQuantityInRow++;
+                    cellsQuantityInColumn++;
                 }
-            if (cellsQuantityInRow >= field.getCellsToWin()) {
+            }
+            if (cellsQuantityInRow >= field.getCellsToWin() || cellsQuantityInColumn >= field.getCellsToWin()) {
                 return true;
             }
+        }
 
+        if (field.getCellsToWin() < field.getGameFieldSize()) {
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < 2; j++) {
+                    if (checkWinnerDiagonals(playerCell, i, j)) return true;
+                }
+            }
+        } else {
+            return checkWinnerDiagonals(playerCell);
         }
         return false;
     }
 
-    private static boolean findWinnerDiagonale(char playerCell) {
-        //TODO find winner by diagonale, improve computer ii blocking gamer tactics, newGame if all cells are locked,
-        // realise ii tactic change if win is not possible in such row or column
-        return false;
+    private static boolean checkWinnerDiagonals(char playerCell) {
+        boolean res = true;
+        for (int i = 1; i < field.getGameFieldSize() && res; i++)
+            res = field.getGameField()[i][i]
+                    == field.getGameField()[0][0]
+                    && field.getGameField()[i][i] == playerCell;
+        if (res)
+            return true;
+        res = true;
+        for (int i = 1; i < field.getGameFieldSize() && res; i++)
+            res = field.getGameField()[field.getGameFieldSize() - i - 1][i]
+                    == field.getGameField()[field.getGameFieldSize() - 1][0]
+                    && field.getGameField()[i][i] == playerCell;
+        return res;
+    }
+
+    private static boolean checkWinnerDiagonals(char playerCell, int startY, int startX) {
+        boolean resultLeft = true;
+        boolean resultRight = true;
+        for (int i = 1; i < field.getCellsToWin() && resultLeft; i++) {
+            resultLeft = field.getGameField()[startY + i][startX + i] == field.getGameField()[startY][startX]
+                    && field.getGameField()[startY + i][startX + i] == playerCell;
+        }
+
+        if (resultLeft) return true;
+
+        for (int i = 1; i < field.getCellsToWin() && resultRight; i++) {
+            resultRight = field.getGameField()[field.getCellsToWin() + startY - i][startX + i - 1]
+                    == field.getGameField()[field.getCellsToWin() + startY - i - 1][startX + i]
+                    && field.getGameField()[field.getCellsToWin() + startY - i][startX + i - 1] == playerCell;
+            System.out.println(field.getCellsToWin() + startY - i );
+        }
+        return resultRight;
     }
 
     private static void computerRandomStrike() {
@@ -285,5 +308,14 @@ public class CrossZero {
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Не осталось пустых строк!");
         }
+    }
+
+    private static boolean isFieldHasEmpty() {
+        for (int i = 0; i < field.getGameFieldSize(); i++) {
+            for (int j = 0; j < field.getGameFieldSize(); j++) {
+                if (field.getGameField()[i][j] == field.getEMPTY_CELL()) return true;
+            }
+        }
+        return false;
     }
 }
