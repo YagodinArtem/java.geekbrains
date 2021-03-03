@@ -14,7 +14,6 @@ public class CrossZero {
     private static boolean isWinnerFind = false;
     private static boolean nextGame = true;
 
-
     public static void main(String[] args) throws IOException {
         try {
             while (nextGame) {
@@ -151,7 +150,6 @@ public class CrossZero {
             if (computer.getComputerRowTactics().size() > 0) {
                 chooseOneRandomRowTactic();
                 computer.isOneRowTacticChosen = true;
-                System.out.println((computer.chooseOneRowTactic) + " тактика выбрана");
             } else {
                 try {
                     computerRandomStrike();
@@ -205,10 +203,9 @@ public class CrossZero {
         if (res)
             return true;
         res = true;
-        for (int i = 1; i < field.getGameFieldSize() && res; i++)
-            res = field.getGameField()[field.getGameFieldSize() - i - 1][i]
-                    == field.getGameField()[field.getGameFieldSize() - 1][0]
-                    && field.getGameField()[i][i] == playerCell;
+
+        for (int i = 0; i < field.getGameFieldSize() && res; i++)
+            res = field.getGameField()[field.getGameFieldSize() - i - 1][i] == playerCell;
         return res;
     }
 
@@ -226,7 +223,6 @@ public class CrossZero {
             resultRight = field.getGameField()[field.getCellsToWin() + startY - i][startX + i - 1]
                     == field.getGameField()[field.getCellsToWin() + startY - i - 1][startX + i]
                     && field.getGameField()[field.getCellsToWin() + startY - i][startX + i - 1] == playerCell;
-            System.out.println(field.getCellsToWin() + startY - i );
         }
         return resultRight;
     }
@@ -292,10 +288,6 @@ public class CrossZero {
             if (rowSize == field.getGameFieldSize()) {
                 emptyRows.add(i);
             }
-        }
-
-        for (int i : emptyRows) {
-            System.out.println(i + " это номер пустой строки");
         }
         computer.setComputerRowTactics(emptyRows);
     }
