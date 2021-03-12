@@ -11,6 +11,6 @@ public class Main {
         employees[4] = new Employee("Jerry", "Assistant", "jerry@mail.ru", 80000.0, 79995673214L, 18);
 
         for (Employee emp : employees)
-            if (emp.getAge() > 40) emp.print();
+            if (emp.getAge() > 40) System.out.println(emp);;
     }
 }
