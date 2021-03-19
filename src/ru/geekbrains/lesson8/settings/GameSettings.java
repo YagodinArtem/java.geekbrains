@@ -3,6 +3,10 @@ package ru.geekbrains.lesson8.settings;
 import lombok.Data;
 import ru.geekbrains.lesson8.enums.DataType;
 
+
+/**
+ * Класс сохраняющий игровые настройки
+ */
 @Data
 public final class GameSettings {
     private DataType playerCell;

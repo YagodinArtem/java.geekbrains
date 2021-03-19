@@ -1,5 +1,6 @@
 package ru.geekbrains.lesson8.impl;
 
+import ru.geekbrains.lesson8.enums.DataType;
 import ru.geekbrains.lesson8.impl.core.Coordinates;
 
 /**
@@ -13,4 +14,10 @@ public interface GameService {
     Coordinates getAiTurnCoordinates();
 
     void gameInit();
+
+    boolean isWinnerFound(DataType playerCell);
+
+    boolean fieldHasEmpty();
+
+
 }

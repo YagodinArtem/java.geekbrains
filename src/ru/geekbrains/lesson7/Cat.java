@@ -16,7 +16,12 @@ public class Cat {
         this.full = full;
     }
 
-    public void eat(Plate p) {
-        p.decreaseFood(appetite, name, this);
+    public void eat(Plate plate) {
+        plate.info();
+        if (appetite <= plate.getFood()) {
+            plate.setFood(plate.getFood() - appetite);
+            this.setFull(true);
+        }
+        System.out.println("Насыщение кота " + name + " c аппетитом " + appetite + " : " + full);
     }
 }

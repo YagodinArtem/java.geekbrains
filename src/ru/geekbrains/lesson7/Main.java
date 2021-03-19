@@ -4,12 +4,10 @@ public class Main {
 
     public static void main(String[] args) {
         Plate plate = new Plate(100);
-        plate.info();
         for (Cat c : catArrayInit()) {
             c.eat(plate);
         }
         plate.foodAdd(100);
-        plate.info();
     }
 
     public static Cat[] catArrayInit() {

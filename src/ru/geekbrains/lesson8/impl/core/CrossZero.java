@@ -5,7 +5,6 @@ import ru.geekbrains.lesson8.impl.GameService;
 import ru.geekbrains.lesson8.settings.GameSettings;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class CrossZero implements GameService {
 
@@ -16,6 +15,7 @@ public class CrossZero implements GameService {
     private static Coordinates coordinatesAI;
 
     /**
+     * Бэкенд игры.
      * При создании объекта класса CrossZero в конструтор
      * передается класс с настройками для игры
      * @param gameSettings - настройки игры
@@ -52,27 +52,6 @@ public class CrossZero implements GameService {
         }
         System.out.println("Gamer " + gamer.toString());
         System.out.println("AI " + computer.toString());
-    }
-
-    private static void computerMove() {
-        if (computer.isOneRowTacticChosen) {
-            computerMoveInRow();
-        } else {
-            findEmptyRows();
-            if (computer.getComputerRowTactics().size() > 0) {
-                chooseOneRandomRowTactic();
-                computer.isOneRowTacticChosen = true;
-            } else {
-                try {
-                    computerRandomStrike();
-                    computer.setTurn(false);
-                    gamer.setTurn(true);
-                } catch (StackOverflowError e) {
-                    System.out.println("computerRandomStrike");
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     private static boolean findWinnerAllDim(DataType playerCell) {
@@ -140,68 +119,18 @@ public class CrossZero implements GameService {
     }
 
     private static void computerRandomStrike() {
-        int Y = (int) (Math.random() * field.getGameFieldSize());
-        int X = (int) (Math.random() * field.getGameFieldSize());
-        if (field.getGameField()[Y][X] == DataType.E) {
-            field.getGameField()[Y][X] = computer.playerCell;
-            coordinatesAI.setRowIndex(X);
-            coordinatesAI.setColumnIndex(Y);
-        } else computerRandomStrike();
-    }
-
-    private static void computerMoveInRow() {
-        if (isCurrentTacticPossible()) {
-            try {
-                int emptyCellInRow = findEmptyCellInRow();
-                field.getGameField()[computer.chooseOneRowTactic][emptyCellInRow] = computer.playerCell;
-                coordinatesAI.setRowIndex(computer.chooseOneRowTactic);
-                coordinatesAI.setColumnIndex(emptyCellInRow);
-            } catch (StackOverflowError e) {
-                System.out.println("computerMoveInRow");
-                e.printStackTrace();
-            }
-            computer.setTurn(false);
-            gamer.setTurn(true);
-        } else {
-            computer.isOneRowTacticChosen = false;
-            computer.setTurn(true);
-            gamer.setTurn(false);
-
+        if (isFieldHasEmpty()) {
+            int Y = (int) (Math.random() * field.getGameFieldSize());
+            int X = (int) (Math.random() * field.getGameFieldSize());
+            if (field.getGameField()[X][Y] == DataType.E) {
+                field.getGameField()[X][Y] = computer.playerCell;
+                coordinatesAI = new Coordinates();
+                coordinatesAI.setRowIndex(X);
+                coordinatesAI.setColumnIndex(Y);
+            } else computerRandomStrike();
         }
     }
 
-    private static int findEmptyCellInRow() {
-        int random = (int) (Math.random() * field.getGameFieldSize());
-        if (field.getGameField()[computer.chooseOneRowTactic][random] == DataType.E) {
-            return random;
-        } else return findEmptyCellInRow();
-    }
-
-    private static boolean isCellValidAndEmpty(int X, int Y) {
-        if (X < 0 || X > field.getGameFieldSize() || Y < 0 || Y > field.getGameFieldSize()) return false;
-        return field.getGameField()[X - 1][Y - 1] == DataType.E;
-    }
-
-    private static void findEmptyRows() {
-        ArrayList<Integer> emptyRows = new ArrayList<>();
-        for (int i = 0; i < field.getGameFieldSize(); i++) {
-            int rowSize = 0;
-            for (int j = 0; j < field.getGameFieldSize(); j++) {
-                if (field.getGameField()[i][j] == DataType.E) {
-                    rowSize++;
-                }
-            }
-            if (rowSize == field.getGameFieldSize()) {
-                emptyRows.add(i);
-            }
-        }
-        computer.setComputerRowTactics(emptyRows);
-    }
-
-    /**
-     * Проверят есть ли на поле пустая ячейка
-     * @return false or true
-     */
     private static boolean isFieldHasEmpty() {
         for (int i = 0; i < field.getGameFieldSize(); i++) {
             for (int j = 0; j < field.getGameFieldSize(); j++) {
@@ -211,39 +140,23 @@ public class CrossZero implements GameService {
         return false;
     }
 
-    /**
-     * Выбирает одну из возможных тактик игры, а именно
-     * строку в которой AI будет пытаться закрыть необохдимое
-     * количество ячеек
-     */
-    private static void chooseOneRandomRowTactic() {
-        int random = (int) (Math.random() * computer.getComputerRowTactics().size());
-        try {
-            computer.setChooseOneRowTactic(computer.getComputerRowTactics().get(random));
-            computer.isOneRowTacticChosen = true;
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("Не осталось пустых строк!");
-        }
+    @Override
+    public boolean fieldHasEmpty() {
+        return isFieldHasEmpty();
     }
 
-    /**
-     * Проверяет логично ли следовать выбранной тактике
-     * (хавтит ли пустых ячеек для победы)
-     */
-    private static boolean isCurrentTacticPossible() {
-        int emptyCells = 0;
-        for (int i = 0; i < field.getGameFieldSize(); i++) {
-            if (field.getGameField()[computer.chooseOneRowTactic][i] == DataType.E
-                    || field.getGameField()[computer.chooseOneRowTactic][i] == computer.playerCell) {
-                emptyCells++;
-            }
-        }
-        return emptyCells == field.getGameFieldSize();
+    @Override
+    public boolean isWinnerFound(DataType playerCell) {
+        return !findWinnerAllDim(playerCell);
     }
 
     @Override
     public void humanTurn(int rowIndex, int colIndex) {
-        computerMove();
+        field.getGameField()[rowIndex][colIndex] = gamer.getPlayerCell();
+        computer.setTurn(true);
+        gamer.setTurn(false);
+        computerRandomStrike();
+        field.print();
     }
 
     @Override
