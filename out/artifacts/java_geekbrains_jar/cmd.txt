@@ -1,1 +1,0 @@
-java -jar F:\RepJava\java.geekbrains\out\artifacts\java_geekbrains_jar\java.geekbrains.jar
