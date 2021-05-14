@@ -28,12 +28,14 @@
             <version>1.18.18</version>
             <scope>provided</scope>
         </dependency>
-    </dependencies>
 
-<!--    <properties>-->
-<!--        <maven.compiler.source>8</maven.compiler.source>-->
-<!--        <maven.compiler.target>15</maven.compiler.target>-->
-<!--        <sourceDirectory>/src</sourceDirectory>-->
-<!--    </properties>-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.6.2</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 
 </project>
