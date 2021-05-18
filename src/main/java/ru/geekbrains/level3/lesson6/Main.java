@@ -17,6 +17,6 @@ public class Main {
 
     public boolean checkArrayContainsOneAndFour(int[] array) {
         return Arrays.stream(array).anyMatch(n -> n == 1)
-                && Arrays.stream(array).anyMatch(n -> n == 4);
+                && Arrays.stream(array).anyMatch(n -> n == 4) && Arrays.stream(array).allMatch(n -> n ==1 || n == 4);
     }
 }

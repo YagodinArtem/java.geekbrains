@@ -36,11 +36,12 @@ public class MainTest {
 
     @Test
     public void checkOneAndFour_basic() {
-        Assertions.assertTrue(main.checkArrayContainsOneAndFour(new int[]{1,2,3,4}));
-        Assertions.assertFalse(main.checkArrayContainsOneAndFour(new int[]{0,0,0,0}));
-        Assertions.assertFalse(main.checkArrayContainsOneAndFour(new int[]{1,2,3,1}));
+        Assertions.assertTrue(main.checkArrayContainsOneAndFour(new int[]{1,1,1,4}));
+        Assertions.assertTrue(main.checkArrayContainsOneAndFour(new int[]{1,4,4,4}));
+        Assertions.assertFalse(main.checkArrayContainsOneAndFour(new int[]{1,1,1,1,1}));
+        Assertions.assertFalse(main.checkArrayContainsOneAndFour(new int[]{4,4,4,4}));
         Assertions.assertFalse(main.checkArrayContainsOneAndFour(new int[]{-9,-123,0,4}));
-        Assertions.assertTrue(main.checkArrayContainsOneAndFour(new int[]{-900000000, 999999,1,4}));
+        Assertions.assertFalse(main.checkArrayContainsOneAndFour(new int[]{-900000000, 999999,1,4}));
     }
 
     /**
